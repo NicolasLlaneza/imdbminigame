@@ -147,7 +147,10 @@ async function initChat() {
     return;
   }
 
-  const Ably = await import("https://esm.sh/ably@2");
+  if (typeof Ably === "undefined") {
+    setChatStatus("No se pudo cargar el SDK de Ably.");
+    return;
+  }
   const client = new Ably.Realtime(ABLY_API_KEY);
 
   client.connection.on("connected", () => {
