@@ -147,11 +147,14 @@ async function initChat() {
     return;
   }
 
-  if (typeof Ably === "undefined") {
+  const AblyModule = await import("https://cdn.jsdelivr.net/npm/ably@2/+esm");
+  const Realtime = AblyModule.Realtime || AblyModule.default?.Realtime;
+  if (!Realtime) {
     setChatStatus("No se pudo cargar el SDK de Ably.");
+    console.error("Ably module keys:", Object.keys(AblyModule));
     return;
   }
-  const client = new Ably.Realtime(ABLY_API_KEY);
+  const client = new Realtime(ABLY_API_KEY);
 
   client.connection.on("connected", () => {
     setChatStatus("Conectado. Escribí algo.");
