@@ -1,5 +1,5 @@
 import { MOVIE_SETS } from "./movies.js";
-import { OMDB_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, CHAT_ROOM } from "./config.js";
+import { OMDB_API_KEY, ABLY_API_KEY, CHAT_ROOM } from "./config.js";
 
 // -------- GAME --------
 
@@ -141,41 +141,38 @@ function setChatStatus(text) {
 let channel = null;
 
 async function initChat() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    setChatStatus("Configurá SUPABASE_URL y SUPABASE_ANON_KEY en config.js");
+  if (!ABLY_API_KEY) {
+    setChatStatus("Configurá ABLY_API_KEY en config.js");
     chatForm.querySelector("button").disabled = true;
     return;
   }
 
-  const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const Ably = await import("https://esm.sh/ably@2");
+  const client = new Ably.Realtime(ABLY_API_KEY);
 
-  channel = supabase.channel(CHAT_ROOM, {
-    config: { broadcast: { self: true } },
+  client.connection.on("connected", () => {
+    setChatStatus("Conectado. Escribí algo.");
+  });
+  client.connection.on("failed", () => {
+    setChatStatus("Error de conexión.");
+  });
+  client.connection.on("disconnected", () => {
+    setChatStatus("Desconectado, reintentando…");
   });
 
-  channel.on("broadcast", { event: "msg" }, (payload) => {
-    const { who, text } = payload.payload;
+  channel = client.channels.get(CHAT_ROOM);
+  await channel.subscribe("msg", (message) => {
+    const { who, text } = message.data;
     appendMessage(who, text);
-  });
-
-  channel.subscribe((status) => {
-    if (status === "SUBSCRIBED") setChatStatus("Conectado. Escribí algo.");
-    else if (status === "CHANNEL_ERROR") setChatStatus("Error de conexión.");
-    else if (status === "TIMED_OUT") setChatStatus("Timeout.");
   });
 }
 
-chatForm.addEventListener("submit", (e) => {
+chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = chatInput.value.trim();
   const who = chatName.value.trim() || "anon";
   if (!text || !channel) return;
-  channel.send({
-    type: "broadcast",
-    event: "msg",
-    payload: { who, text },
-  });
+  await channel.publish("msg", { who, text });
   chatInput.value = "";
 });
 

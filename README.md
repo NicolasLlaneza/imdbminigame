@@ -11,22 +11,19 @@ Juego cortito para adivinar qué versión de una peli está mejor rankeada en IM
 
 ## Setup
 
-### 1. Chat con Supabase
+### 1. Chat con Ably
 
-Necesitás una cuenta gratis en [supabase.com](https://supabase.com) y crear un proyecto.
+Necesitás una cuenta gratis en [ably.com](https://ably.com/signup). El free tier da 6M mensajes/mes y 200 conexiones simultáneas — sobra para 3 amigos.
 
-Este juego usa **Supabase Realtime Broadcast**, que **no requiere tabla ni SQL** — los mensajes viajan en vivo por WebSocket y no se guardan. Perfecto para un chat efímero entre amigos.
+En el **dashboard → Apps → Default → API Keys**, copiá la **Root key** (la de arriba, con todos los permisos).
 
-En **Project Settings → API** copiá:
-- `Project URL`
-- `anon public` key
-
-Pegalos en `config.js`:
+Pegala en `config.js`:
 
 ```js
-export const SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
-export const SUPABASE_ANON_KEY = "eyJhbGciOi...";
+export const ABLY_API_KEY = "TU-APP-ID.TU-KEY-ID:TU-KEY-SECRET";
 ```
+
+> ⚠️ La key queda visible en el frontend. Para un chat entre 3 amigos es aceptable; en producción se usa token auth desde un backend chico.
 
 ### 2. Correrlo localmente
 
@@ -76,4 +73,4 @@ El juego busca en OMDb por `title + year`, así que asegurate que el título coi
 ## Créditos
 
 - Datos: [OMDb API](http://www.omdbapi.com/)
-- Chat: [Supabase Realtime](https://supabase.com/docs/guides/realtime)
+- Chat: [Ably Realtime](https://ably.com/docs/realtime)

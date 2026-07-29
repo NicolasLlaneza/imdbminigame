@@ -1,11 +1,10 @@
-// Config del juego. Editá SUPABASE_URL y SUPABASE_ANON_KEY con los de tu proyecto.
+// Config del juego. Editá ABLY_API_KEY con la tuya.
 // La OMDb key ya está puesta.
 export const OMDB_API_KEY = "84dd857e";
 
-// Poné acá los datos de tu proyecto Supabase (Project Settings → API).
-// Mientras estén vacíos, el chat no se conecta pero el juego funciona igual.
-export const SUPABASE_URL = "";
-export const SUPABASE_ANON_KEY = "";
+// Poné acá tu API key de Ably (https://ably.com/dashboard → Apps → API Keys).
+// Mientras esté vacía, el chat no se conecta pero el juego funciona igual.
+export const ABLY_API_KEY = "";
 
 // Nombre del canal de chat. Los tres usan el mismo.
 export const CHAT_ROOM = "sala-principal";
