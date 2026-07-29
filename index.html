@@ -11,32 +11,44 @@
     <main class="game">
       <header class="game-header">
         <h1>¿Cuál rankea mejor?</h1>
-        <div class="score">
-          <span>Aciertos: <b id="score-hits">0</b></span>
-          <span>Rondas: <b id="score-total">0</b></span>
-          <button id="btn-next" class="secondary" hidden>Siguiente</button>
+        <div class="header-controls">
+          <input id="player-name" type="text" placeholder="Tu nombre" maxlength="20" />
+          <button id="btn-start">Nueva ronda</button>
         </div>
       </header>
 
+      <div class="timer-bar-wrap" id="timer-wrap" hidden>
+        <div class="timer-bar" id="timer-bar"></div>
+        <span class="timer-text" id="timer-text">10.0s</span>
+      </div>
+
       <section id="round" class="round">
-        <p class="loading">Cargando películas…</p>
+        <p class="loading">Poné tu nombre y tocá "Nueva ronda" para arrancar.</p>
       </section>
 
-      <p class="hint">Tocá la versión que creas que tiene mejor rating de IMDb.</p>
+      <p class="hint" id="hint">Tocá la versión que creas que tiene mejor rating de IMDb. Tenés 10 segundos.</p>
     </main>
 
-    <aside class="chat">
-      <div class="chat-header">
-        <h2>Chat</h2>
-        <input id="chat-name" type="text" placeholder="Tu nombre" maxlength="20" />
-      </div>
-      <div id="chat-messages" class="chat-messages">
-        <p class="chat-status" id="chat-status">Conectando…</p>
-      </div>
-      <form id="chat-form" class="chat-form">
-        <input id="chat-input" type="text" placeholder="Escribí un mensaje…" maxlength="300" autocomplete="off" />
-        <button type="submit">Enviar</button>
-      </form>
+    <aside class="side">
+      <section class="leaderboard">
+        <h2>Jugadores</h2>
+        <ul id="players-list" class="players-list">
+          <li class="empty">Esperando jugadores…</li>
+        </ul>
+      </section>
+
+      <section class="chat">
+        <div class="chat-header">
+          <h2>Chat</h2>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+          <p class="chat-status" id="chat-status">Conectando…</p>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <input id="chat-input" type="text" placeholder="Escribí un mensaje…" maxlength="300" autocomplete="off" />
+          <button type="submit">Enviar</button>
+        </form>
+      </section>
     </aside>
   </div>
 

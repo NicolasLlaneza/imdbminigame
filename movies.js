@@ -203,4 +203,45 @@ export const MOVIE_SETS = [
     { title: "Death Race 2000", year: "1975" },
     { title: "Death Race", year: "2008" },
   ]},
+  // --- Capciosas: puntajes muy parejos o donde el remake gana ---
+  { name: "Funny Games", versions: [
+    { title: "Funny Games", year: "1997" },
+    { title: "Funny Games", year: "2007" },
+  ]},
+  { name: "Nosferatu", versions: [
+    { title: "Nosferatu", year: "1922" },
+    { title: "Nosferatu the Vampyre", year: "1979" },
+  ]},
+  { name: "Little Shop of Horrors", versions: [
+    { title: "The Little Shop of Horrors", year: "1960" },
+    { title: "Little Shop of Horrors", year: "1986" },
+  ]},
+  { name: "The Blob", versions: [
+    { title: "The Blob", year: "1958" },
+    { title: "The Blob", year: "1988" },
+  ]},
+  { name: "The Amityville Horror", versions: [
+    { title: "The Amityville Horror", year: "1979" },
+    { title: "The Amityville Horror", year: "2005" },
+  ]},
+  { name: "The Mummy", versions: [
+    { title: "The Mummy", year: "1932" },
+    { title: "The Mummy", year: "1999" },
+  ]},
+  { name: "All Quiet on the Western Front", versions: [
+    { title: "All Quiet on the Western Front", year: "1930" },
+    { title: "All Quiet on the Western Front", year: "2022" },
+  ]},
+  { name: "West Side Story", versions: [
+    { title: "West Side Story", year: "1961" },
+    { title: "West Side Story", year: "2021" },
+  ]},
+  { name: "Willard", versions: [
+    { title: "Willard", year: "1971" },
+    { title: "Willard", year: "2003" },
+  ]},
+  { name: "Sabrina", versions: [
+    { title: "Sabrina", year: "1954" },
+    { title: "Sabrina", year: "1995" },
+  ]},
 ];

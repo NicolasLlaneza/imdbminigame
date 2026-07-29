@@ -34,7 +34,8 @@ html, body {
 
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; height: auto; }
-  .chat { height: 60vh; }
+  .side { height: auto; }
+  .chat { height: 40vh; }
 }
 
 /* -------- GAME -------- */
@@ -52,9 +53,11 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .game-header h1 {
@@ -63,15 +66,50 @@ html, body {
   color: var(--accent);
 }
 
-.score {
+.header-controls {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   align-items: center;
-  font-size: 14px;
-  color: var(--muted);
 }
 
-.score b { color: var(--text); font-weight: 600; }
+.header-controls input {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 160px;
+}
+
+.timer-bar-wrap {
+  position: relative;
+  background: var(--panel-2);
+  border-radius: 4px;
+  height: 24px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.timer-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--good) 0%, var(--accent) 50%, var(--bad) 100%);
+  transition: width 100ms linear;
+  width: 100%;
+}
+
+.timer-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #111;
+  text-shadow: 0 0 3px rgba(255,255,255,0.3);
+}
 
 .hint {
   color: var(--muted);
@@ -105,6 +143,7 @@ html, body {
   transition: transform 0.12s, border-color 0.12s;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .card:hover:not(.revealed) {
@@ -115,6 +154,7 @@ html, body {
 .card.revealed { cursor: default; }
 .card.winner { border-color: var(--good); }
 .card.loser { border-color: var(--bad); opacity: 0.65; }
+.card.my-pick { box-shadow: 0 0 0 3px var(--accent) inset; }
 
 .card .poster {
   aspect-ratio: 2 / 3;
@@ -148,14 +188,18 @@ html, body {
 .card .info .year { color: var(--muted); font-size: 13px; }
 
 .card .rating {
-  margin-top: 8px;
+  margin-top: 6px;
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
-  display: none;
 }
 
-.card.revealed .rating { display: block; }
+.card .picks-badge {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
 
 button {
   background: var(--accent);
@@ -168,15 +212,81 @@ button {
   font-size: 14px;
 }
 
-button:hover { background: var(--accent-2); }
-button.secondary {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-}
-button.secondary:hover { background: rgba(245, 197, 24, 0.1); }
+button:hover:not(:disabled) { background: var(--accent-2); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* -------- CHAT -------- */
+/* -------- SIDE PANEL -------- */
+.side {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 12px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Leaderboard */
+.leaderboard {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.leaderboard h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.players-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.players-list .empty {
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.player-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--panel-2);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.player-row.me { outline: 1px solid var(--accent); }
+.player-row .rank { color: var(--muted); font-weight: 600; font-size: 12px; }
+.player-row .player-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-row .player-status {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.player-row .player-score {
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 32px;
+  text-align: right;
+}
+
+/* Chat */
 .chat {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -184,31 +294,18 @@ button.secondary:hover { background: rgba(245, 197, 24, 0.1); }
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;
 }
 
 .chat-header {
-  padding: 12px 14px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  align-items: center;
 }
 
 .chat-header h2 {
   margin: 0;
   font-size: 15px;
   color: var(--accent);
-  flex-shrink: 0;
-}
-
-.chat-header input {
-  flex: 1;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 13px;
 }
 
 .chat-messages {
@@ -218,6 +315,7 @@ button.secondary:hover { background: rgba(245, 197, 24, 0.1); }
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-height: 0;
 }
 
 .chat-status {
@@ -236,7 +334,6 @@ button.secondary:hover { background: rgba(245, 197, 24, 0.1); }
 .msg .who {
   color: var(--accent);
   font-weight: 600;
-  margin-right: 6px;
 }
 
 .chat-form {
